@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm add:*)",
+      "Bash(pnpm typecheck:*)",
+      "Bash(pnpm nuxi typecheck:*)",
+      "mcp__nuxt-remote__get-documentation-page",
+      "mcp__nuxt-remote__list-documentation-pages",
+      "mcp__nuxt-remote__list-modules",
+      "mcp__nuxt-remote__get-module",
+      "WebSearch",
+      "WebFetch(domain:www.better-auth.com)",
+      "WebFetch(domain:github.com)",
+      "mcp__nuxt-ui-remote__list-components",
+      "mcp__nuxt-ui-remote__get-component",
+      "WebFetch(domain:ui.nuxt.com)",
+      "Bash(pnpm db:generate:*)",
+      "Bash(pnpm nuxt prepare:*)",
+      "Bash(ls:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(timeout 15 pnpm dev:*)",
+      "Bash(pnpm db:push:*)",
+      "mcp__nuxt-ui-remote__list-documentation-pages",
+      "mcp__nuxt-ui-remote__get-documentation-page"
+    ]
+  }
+}
