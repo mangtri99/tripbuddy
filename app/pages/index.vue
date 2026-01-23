@@ -2,7 +2,7 @@
   <div>
     <!-- Hero Section -->
     <UPageHero
-      title="Plan Your Perfect Trip Together"
+      title="Plan, Share, Explore with Trip Buddy"
       description="From itinerary planning to budget tracking, find travel partners and discover amazing places. Everything you need for unforgettable journeys, all in one app."
       :links="[
         {
@@ -21,17 +21,18 @@
         },
       ]"
       :ui="{
-        title: 'text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight',
-        description: 'text-lg sm:text-xl text-slate-600 dark:text-slate-400',
+        title: 'text-4xl sm:text-5xl lg:text-5xl font-bold tracking-tight',
+        description: 'text-md sm:text-xl text-slate-600 dark:text-slate-400',
+        headline: 'flex items-center justify-center',
+        container: 'lg:py-20 py-8 sm:py-12',
       }"
     >
-      <template #top>
-        <UBadge
-          label="New: Find Travel Partners"
-          icon="i-lucide-sparkles"
-          color="primary"
-          variant="subtle"
-          class="mb-6"
+      <template #headline>
+        <NuxtImg
+          src="/images/logo_hero.png"
+          alt="Trip Buddy"
+          width="376"
+          height="auto"
         />
       </template>
     </UPageHero>

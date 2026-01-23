@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center gap-2">
     <div
-      class="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-sky-400 to-cyan-500"
+      class="flex items-center justify-center w-8 h-8 rounded-lg bg-linear-to-br from-sky-400 to-cyan-500"
     >
       <UIcon name="i-lucide-plane" class="w-5 h-5 text-white" />
     </div>
