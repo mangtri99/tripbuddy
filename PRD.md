@@ -1,6 +1,6 @@
 # Product Requirements Document (PRD)
 
-## TRIP Buddy - Travel Planning Application
+## Trip Buddy - Travel Planning Application
 
 **Version:** 1.0
 **Last Updated:** January 2026
@@ -10,7 +10,7 @@
 
 ## 1. Executive Summary
 
-TRIP Buddy is a comprehensive travel planning application designed to simplify and enhance the travel experience. The platform enables users to plan itineraries, manage budgets, coordinate with travel groups, find travel partners, discover tourist attractions, and share reviews—all in one unified interface.
+Trip Buddy is a comprehensive travel planning application designed to simplify and enhance the travel experience. The platform enables users to plan itineraries, manage budgets, coordinate with travel groups, find travel partners, discover tourist attractions, and share reviews—all in one unified interface.
 
 ---
 
@@ -24,7 +24,7 @@ Travelers face multiple challenges when planning trips:
 - Scattered information about tourist attractions and authentic reviews
 - Complex expense tracking and budget sharing among travel companions
 
-TRIP Buddy addresses these pain points by providing an all-in-one travel planning solution.
+Trip Buddy addresses these pain points by providing an all-in-one travel planning solution.
 
 ---
 

@@ -1,52 +1,50 @@
 <script setup>
 useHead({
-  meta: [
-    { name: 'viewport', content: 'width=device-width, initial-scale=1' }
-  ],
-  link: [
-    { rel: 'icon', href: '/favicon.ico' }
-  ],
+  meta: [{ name: "viewport", content: "width=device-width, initial-scale=1" }],
+  link: [{ rel: "icon", href: "/favicon.ico" }],
   htmlAttrs: {
-    lang: 'en'
-  }
-})
+    lang: "en",
+  },
+});
 
-const title = 'TRIP Buddy - Your Ultimate Travel Planning Companion'
-const description = 'Plan trips, track budgets, find travel partners, and discover amazing places. All-in-one travel planning made easy.'
+const title = "Trip Buddy - Your Ultimate Travel Planning Companion";
+const description =
+  "Plan trips, track budgets, find travel partners, and discover amazing places. All-in-one travel planning made easy.";
 
 useSeoMeta({
   title,
   description,
   ogTitle: title,
   ogDescription: description,
-  twitterCard: 'summary_large_image'
-})
+  twitterCard: "summary_large_image",
+});
 
-const { loggedIn, user } = useUserSession()
-const { logout, isLoading } = useAuth()
+const { loggedIn, user } = useUserSession();
+const { logout, isLoading } = useAuth();
 
 const userMenuItems = [
-  [{
-    label: 'Dashboard',
-    icon: 'i-lucide-layout-dashboard',
-    to: '/dashboard'
-  }],
-  [{
-    label: 'Sign out',
-    icon: 'i-lucide-log-out',
-    click: logout
-  }]
-]
+  [
+    {
+      label: "Dashboard",
+      icon: "i-lucide-layout-dashboard",
+      to: "/dashboard",
+    },
+  ],
+  [
+    {
+      label: "Sign out",
+      icon: "i-lucide-log-out",
+      click: logout,
+    },
+  ],
+];
 </script>
 
 <template>
   <UApp>
     <UHeader>
       <template #left>
-        <NuxtLink
-          to="/"
-          class="flex items-center"
-        >
+        <NuxtLink to="/" class="flex items-center">
           <AppLogo />
         </NuxtLink>
 
@@ -58,21 +56,14 @@ const userMenuItems = [
 
         <template v-if="loggedIn">
           <UDropdownMenu :items="userMenuItems">
-            <UButton
-              color="neutral"
-              variant="ghost"
-              :loading="isLoading"
-            >
+            <UButton color="neutral" variant="ghost" :loading="isLoading">
               <UAvatar
                 :alt="user?.name || 'User'"
                 :src="user?.avatarUrl || undefined"
                 size="xs"
               />
               <span class="hidden sm:inline">{{ user?.name }}</span>
-              <UIcon
-                name="i-lucide-chevron-down"
-                class="w-4 h-4"
-              />
+              <UIcon name="i-lucide-chevron-down" class="w-4 h-4" />
             </UButton>
           </UDropdownMenu>
         </template>
@@ -110,7 +101,8 @@ const userMenuItems = [
             Your travel companion for planning the perfect trip.
           </p>
           <p class="text-xs text-muted">
-            &copy; {{ new Date().getFullYear() }} TRIP Buddy. All rights reserved.
+            &copy; {{ new Date().getFullYear() }} Trip Buddy. All rights
+            reserved.
           </p>
         </div>
       </template>

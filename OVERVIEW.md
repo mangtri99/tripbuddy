@@ -1,6 +1,6 @@
-# TRIP Buddy
+# Trip Buddy
 
-TRIP Buddy is a travel planning application that helps users plan their trips and make the most of their time. It provides a user-friendly interface for creating and managing travel plans, and includes features such as itinerary planning, budget tracking, and travel insurance.
+Trip Buddy is a travel planning application that helps users plan their trips and make the most of their time. It provides a user-friendly interface for creating and managing travel plans, and includes features such as itinerary planning, budget tracking, and travel insurance.
 
 ## Features
 

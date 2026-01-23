@@ -1,9 +1,9 @@
 <script setup lang="ts">
 definePageMeta({
-  middleware: 'auth'
-})
+  middleware: "auth",
+});
 
-const { user, logout, isLoading } = useAuth()
+const { user, logout, isLoading } = useAuth();
 </script>
 
 <template>
@@ -11,12 +11,8 @@ const { user, logout, isLoading } = useAuth()
     <div class="max-w-4xl mx-auto">
       <div class="flex items-center justify-between mb-8">
         <div>
-          <h1 class="text-3xl font-bold">
-            Dashboard
-          </h1>
-          <p class="text-muted mt-1">
-            Welcome back, {{ user?.name }}!
-          </p>
+          <h1 class="text-3xl font-bold">Dashboard</h1>
+          <p class="text-muted mt-1">Welcome back, {{ user?.name }}!</p>
         </div>
         <UButton
           label="Logout"
@@ -33,14 +29,9 @@ const { user, logout, isLoading } = useAuth()
           <template #header>
             <div class="flex items-center gap-3">
               <div class="p-2 rounded-lg bg-primary/10">
-                <UIcon
-                  name="i-lucide-plane"
-                  class="w-6 h-6 text-primary"
-                />
+                <UIcon name="i-lucide-plane" class="w-6 h-6 text-primary" />
               </div>
-              <h2 class="text-lg font-semibold">
-                My Trips
-              </h2>
+              <h2 class="text-lg font-semibold">My Trips</h2>
             </div>
           </template>
           <p class="text-muted text-sm">
@@ -62,14 +53,9 @@ const { user, logout, isLoading } = useAuth()
           <template #header>
             <div class="flex items-center gap-3">
               <div class="p-2 rounded-lg bg-success/10">
-                <UIcon
-                  name="i-lucide-users"
-                  class="w-6 h-6 text-success"
-                />
+                <UIcon name="i-lucide-users" class="w-6 h-6 text-success" />
               </div>
-              <h2 class="text-lg font-semibold">
-                Travel Partners
-              </h2>
+              <h2 class="text-lg font-semibold">Travel Partners</h2>
             </div>
           </template>
           <p class="text-muted text-sm">
@@ -91,14 +77,9 @@ const { user, logout, isLoading } = useAuth()
           <template #header>
             <div class="flex items-center gap-3">
               <div class="p-2 rounded-lg bg-warning/10">
-                <UIcon
-                  name="i-lucide-wallet"
-                  class="w-6 h-6 text-warning"
-                />
+                <UIcon name="i-lucide-wallet" class="w-6 h-6 text-warning" />
               </div>
-              <h2 class="text-lg font-semibold">
-                Expenses
-              </h2>
+              <h2 class="text-lg font-semibold">Expenses</h2>
             </div>
           </template>
           <p class="text-muted text-sm">
@@ -119,9 +100,17 @@ const { user, logout, isLoading } = useAuth()
 
       <UCard class="mt-8">
         <template #header>
-          <h2 class="text-lg font-semibold">
-            Account Information
-          </h2>
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-semibold">Account Information</h2>
+            <UButton
+              label="Edit profile"
+              color="neutral"
+              variant="ghost"
+              icon="i-lucide-edit"
+              to="/profile"
+              size="sm"
+            />
+          </div>
         </template>
         <div class="space-y-4">
           <div class="flex items-center gap-4">
@@ -136,6 +125,9 @@ const { user, logout, isLoading } = useAuth()
               </p>
               <p class="text-muted">
                 {{ user?.email }}
+              </p>
+              <p v-if="user?.bio" class="text-sm text-muted mt-1">
+                {{ user?.bio }}
               </p>
             </div>
           </div>

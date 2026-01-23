@@ -1,154 +1,160 @@
 interface LoginCredentials {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 
 interface RegisterCredentials {
-  email: string
-  password: string
-  name: string
+  email: string;
+  password: string;
+  name: string;
 }
 
 export function useAuth() {
-  const { loggedIn, user, session, clear, fetch: fetchSession } = useUserSession()
-  const toast = useToast()
+  const {
+    loggedIn,
+    user,
+    session,
+    clear,
+    fetch: fetchSession,
+  } = useUserSession();
+  const toast = useToast();
 
-  const isLoading = ref(false)
+  const isLoading = ref(false);
 
   async function login(credentials: LoginCredentials) {
-    isLoading.value = true
+    isLoading.value = true;
     try {
-      await $fetch('/api/auth/login', {
-        method: 'POST',
-        body: credentials
-      })
-      await fetchSession()
+      await $fetch("/api/auth/login", {
+        method: "POST",
+        body: credentials,
+      });
+      await fetchSession();
       toast.add({
-        title: 'Welcome back!',
-        description: 'You have been logged in successfully.',
-        color: 'success'
-      })
-      await navigateTo('/dashboard')
+        title: "Welcome back!",
+        description: "You have been logged in successfully.",
+        color: "success",
+      });
+      await navigateTo("/dashboard");
     } catch (error: unknown) {
-      const fetchError = error as { data?: { message?: string } }
-      const message = fetchError.data?.message || 'Failed to login'
+      const fetchError = error as { data?: { message?: string } };
+      const message = fetchError.data?.message || "Failed to login";
       toast.add({
-        title: 'Login failed',
+        title: "Login failed",
         description: message,
-        color: 'error'
-      })
-      throw error
+        color: "error",
+      });
+      throw error;
     } finally {
-      isLoading.value = false
+      isLoading.value = false;
     }
   }
 
   async function register(credentials: RegisterCredentials) {
-    isLoading.value = true
+    isLoading.value = true;
     try {
-      await $fetch('/api/auth/register', {
-        method: 'POST',
-        body: credentials
-      })
-      await fetchSession()
+      await $fetch("/api/auth/register", {
+        method: "POST",
+        body: credentials,
+      });
+      await fetchSession();
       toast.add({
-        title: 'Account created!',
-        description: 'Welcome to TRIP Buddy.',
-        color: 'success'
-      })
-      await navigateTo('/dashboard')
+        title: "Account created!",
+        description: "Welcome to Trip Buddy.",
+        color: "success",
+      });
+      await navigateTo("/dashboard");
     } catch (error: unknown) {
-      const fetchError = error as { data?: { message?: string } }
-      const message = fetchError.data?.message || 'Failed to register'
+      const fetchError = error as { data?: { message?: string } };
+      const message = fetchError.data?.message || "Failed to register";
       toast.add({
-        title: 'Registration failed',
+        title: "Registration failed",
         description: message,
-        color: 'error'
-      })
-      throw error
+        color: "error",
+      });
+      throw error;
     } finally {
-      isLoading.value = false
+      isLoading.value = false;
     }
   }
 
   async function logout() {
-    isLoading.value = true
+    isLoading.value = true;
     try {
-      await $fetch('/api/auth/logout', {
-        method: 'POST'
-      })
-      await clear()
+      await $fetch("/api/auth/logout", {
+        method: "POST",
+      });
+      await clear();
       toast.add({
-        title: 'Logged out',
-        description: 'You have been logged out successfully.',
-        color: 'neutral'
-      })
-      await navigateTo('/login')
+        title: "Logged out",
+        description: "You have been logged out successfully.",
+        color: "neutral",
+      });
+      await navigateTo("/login");
     } catch (error: unknown) {
-      const fetchError = error as { data?: { message?: string } }
-      const message = fetchError.data?.message || 'Failed to logout'
+      const fetchError = error as { data?: { message?: string } };
+      const message = fetchError.data?.message || "Failed to logout";
       toast.add({
-        title: 'Logout failed',
+        title: "Logout failed",
         description: message,
-        color: 'error'
-      })
+        color: "error",
+      });
     } finally {
-      isLoading.value = false
+      isLoading.value = false;
     }
   }
 
   async function forgotPassword(email: string) {
-    isLoading.value = true
+    isLoading.value = true;
     try {
-      const response = await $fetch('/api/auth/forgot-password', {
-        method: 'POST',
-        body: { email }
-      })
+      const response = await $fetch("/api/auth/forgot-password", {
+        method: "POST",
+        body: { email },
+      });
       toast.add({
-        title: 'Check your email',
+        title: "Check your email",
         description: response.message,
-        color: 'success'
-      })
-      return response
+        color: "success",
+      });
+      return response;
     } catch (error: unknown) {
-      const fetchError = error as { data?: { message?: string } }
-      const message = fetchError.data?.message || 'Failed to send reset email'
+      const fetchError = error as { data?: { message?: string } };
+      const message = fetchError.data?.message || "Failed to send reset email";
       toast.add({
-        title: 'Error',
+        title: "Error",
         description: message,
-        color: 'error'
-      })
-      throw error
+        color: "error",
+      });
+      throw error;
     } finally {
-      isLoading.value = false
+      isLoading.value = false;
     }
   }
 
   async function resetPassword(token: string, password: string) {
-    isLoading.value = true
+    isLoading.value = true;
     try {
-      const response = await $fetch('/api/auth/reset-password', {
-        method: 'POST',
-        body: { token, password }
-      })
+      const response = await $fetch("/api/auth/reset-password", {
+        method: "POST",
+        body: { token, password },
+      });
       toast.add({
-        title: 'Password reset',
+        title: "Password reset",
         description: response.message,
-        color: 'success'
-      })
-      await navigateTo('/login')
-      return response
+        color: "success",
+      });
+      await navigateTo("/login");
+      return response;
     } catch (error: unknown) {
-      const fetchError = error as { data?: { message?: string } }
-      const message = fetchError.data?.message || 'Failed to reset password'
+      const fetchError = error as { data?: { message?: string } };
+      const message = fetchError.data?.message || "Failed to reset password";
       toast.add({
-        title: 'Error',
+        title: "Error",
         description: message,
-        color: 'error'
-      })
-      throw error
+        color: "error",
+      });
+      throw error;
     } finally {
-      isLoading.value = false
+      isLoading.value = false;
     }
   }
 
@@ -162,6 +168,6 @@ export function useAuth() {
     logout,
     forgotPassword,
     resetPassword,
-    fetchSession
-  }
+    fetchSession,
+  };
 }
