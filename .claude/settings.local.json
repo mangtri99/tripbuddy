@@ -21,7 +21,10 @@
       "Bash(timeout 15 pnpm dev:*)",
       "Bash(pnpm db:push:*)",
       "mcp__nuxt-ui-remote__list-documentation-pages",
-      "mcp__nuxt-ui-remote__get-documentation-page"
+      "mcp__nuxt-ui-remote__get-documentation-page",
+      "Bash(npm run build:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

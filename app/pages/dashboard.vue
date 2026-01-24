@@ -45,6 +45,7 @@ const { user, logout, isLoading } = useAuth();
               block
               icon="i-lucide-arrow-right"
               trailing
+              to="/trips"
             />
           </template>
         </UCard>

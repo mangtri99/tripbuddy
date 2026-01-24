@@ -34,6 +34,6 @@ export default defineEventHandler(async (event) => {
     .returning();
 
   return {
-    user: sanitizeUser(updatedUser),
+    user: sanitizeUser(updatedUser!),
   };
 });

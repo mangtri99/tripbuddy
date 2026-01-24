@@ -28,5 +28,15 @@ export default defineAppConfig({
         root: "w-full",
       },
     },
+    select: {
+      slots: {
+        base: "w-full",
+      },
+    },
+    textarea: {
+      slots: {
+        root: "w-full",
+      },
+    },
   },
 });

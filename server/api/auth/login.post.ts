@@ -39,7 +39,8 @@ export default defineEventHandler(async (event) => {
       id: user.id,
       email: user.email,
       name: user.name,
-      avatarUrl: user.avatarUrl
+      avatarUrl: user.avatarUrl,
+      bio: user.bio
     },
     loggedInAt: Date.now()
   })
@@ -49,7 +50,8 @@ export default defineEventHandler(async (event) => {
       id: user.id,
       email: user.email,
       name: user.name,
-      avatarUrl: user.avatarUrl
+      avatarUrl: user.avatarUrl,
+      bio: user.bio
     }
   }
 })
