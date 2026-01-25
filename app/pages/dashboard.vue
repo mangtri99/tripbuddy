@@ -56,20 +56,21 @@ const { user, logout, isLoading } = useAuth();
               <div class="p-2 rounded-lg bg-success/10">
                 <UIcon name="i-lucide-users" class="w-6 h-6 text-success" />
               </div>
-              <h2 class="text-lg font-semibold">Travel Partners</h2>
+              <h2 class="text-lg font-semibold">Travel Groups</h2>
             </div>
           </template>
           <p class="text-muted text-sm">
-            Find travel companions for your next trip.
+            Plan trips together with friends and family.
           </p>
           <template #footer>
             <UButton
-              label="Find partners"
+              label="View groups"
               color="success"
               variant="soft"
               block
               icon="i-lucide-arrow-right"
               trailing
+              to="/groups"
             />
           </template>
         </UCard>

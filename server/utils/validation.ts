@@ -92,3 +92,32 @@ export type UpdateTripInput = z.infer<typeof updateTripSchema>
 export type CreateItineraryItemInput = z.infer<typeof createItineraryItemSchema>
 export type UpdateItineraryItemInput = z.infer<typeof updateItineraryItemSchema>
 export type ReorderItemsInput = z.infer<typeof reorderItemsSchema>
+
+// Travel group validation schemas
+export const groupRoleValues = ['admin', 'editor', 'viewer'] as const
+
+export const createGroupSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100, 'Name must be at most 100 characters').trim(),
+  description: z.string().max(1000, 'Description must be at most 1000 characters').optional(),
+  tripId: z.string().optional(),
+  coverImageUrl: z.string().url().optional()
+})
+
+export const updateGroupSchema = createGroupSchema.partial()
+
+export const inviteMemberSchema = z.object({
+  email: z.string().email('Invalid email address').toLowerCase().trim().optional(),
+  userId: z.string().optional(),
+  role: z.enum(groupRoleValues).default('viewer')
+}).refine(data => data.email || data.userId, {
+  message: 'Either email or userId must be provided'
+})
+
+export const updateMemberRoleSchema = z.object({
+  role: z.enum(groupRoleValues)
+})
+
+export type CreateGroupInput = z.infer<typeof createGroupSchema>
+export type UpdateGroupInput = z.infer<typeof updateGroupSchema>
+export type InviteMemberInput = z.infer<typeof inviteMemberSchema>
+export type UpdateMemberRoleInput = z.infer<typeof updateMemberRoleSchema>

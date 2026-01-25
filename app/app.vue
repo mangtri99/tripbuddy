@@ -34,7 +34,7 @@ const userMenuItems = [
     {
       label: "Sign out",
       icon: "i-lucide-log-out",
-      click: logout,
+      onSelect: logout,
     },
   ],
 ];

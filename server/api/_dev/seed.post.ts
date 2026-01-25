@@ -89,9 +89,12 @@ export default defineEventHandler(async (event) => {
         bio: userData.bio,
         passwordHash,
         emailVerified: true,
-        avatarUrl: faker.image.avatar()
+        avatarUrl: faker.image.avatar(),
+        authProvider: 'email'
       }).returning()
-      createdUsers.push(user)
+      if (user) {
+        createdUsers.push({ id: user.id, email: user.email, name: user.name })
+      }
     }
     results.users = createdUsers.length
 
@@ -121,7 +124,9 @@ export default defineEventHandler(async (event) => {
 
       for (const place of placesForCity) {
         const [created] = await db.insert(schema.places).values(place).returning()
-        createdPlaces.push({ id: created.id, name: created.name, city: dest.city })
+        if (created) {
+          createdPlaces.push({ id: created.id, name: created.name, city: dest.city })
+        }
       }
     }
     results.places = createdPlaces.length
@@ -140,27 +145,32 @@ export default defineEventHandler(async (event) => {
         const endDate = new Date(startDate)
         endDate.setDate(endDate.getDate() + faker.number.int({ min: 3, max: 14 }))
 
+        const tripStartDate = startDate.toISOString().split('T')[0]!
+        const tripEndDate = endDate.toISOString().split('T')[0]!
+
         const [trip] = await db.insert(schema.trips).values({
           id: createId(),
           userId: user.id,
           title: `${dest.city} ${faker.helpers.arrayElement(['Adventure', 'Getaway', 'Trip', 'Vacation', 'Journey'])}`,
           destination: `${dest.city}, ${dest.country}`,
           description: faker.lorem.paragraph(),
-          startDate: startDate.toISOString().split('T')[0],
-          endDate: endDate.toISOString().split('T')[0],
+          startDate: tripStartDate,
+          endDate: tripEndDate,
           status: faker.helpers.arrayElement(TRIP_STATUSES),
           visibility: faker.helpers.arrayElement(TRIP_VISIBILITIES),
           budget: faker.number.int({ min: 500, max: 10000 }),
           currency: 'USD'
         }).returning()
 
-        createdTrips.push({
-          id: trip.id,
-          title: trip.title,
-          userId: user.id,
-          startDate: trip.startDate!,
-          endDate: trip.endDate!
-        })
+        if (trip) {
+          createdTrips.push({
+            id: trip.id,
+            title: trip.title,
+            userId: user.id,
+            startDate: tripStartDate,
+            endDate: tripEndDate
+          })
+        }
       }
     }
     results.trips = createdTrips.length
@@ -257,7 +267,9 @@ export default defineEventHandler(async (event) => {
         description: faker.lorem.sentence(),
         createdBy: trip.userId
       }).returning()
-      createdGroups.push({ id: group.id, createdBy: trip.userId })
+      if (group) {
+        createdGroups.push({ id: group.id, createdBy: trip.userId })
+      }
     }
     results.travelGroups = createdGroups.length
 
@@ -324,17 +336,20 @@ export default defineEventHandler(async (event) => {
         description: faker.lorem.sentence(),
         closesAt: faker.date.future()
       }).returning()
-      voteCount++
 
-      const numOptions = faker.number.int({ min: 2, max: 4 })
-      for (let i = 0; i < numOptions; i++) {
-        await db.insert(schema.activityVoteOptions).values({
-          id: createId(),
-          voteId: vote.id,
-          title: faker.lorem.words(3),
-          description: faker.lorem.sentence(),
-          voteCount: faker.number.int({ min: 0, max: 5 })
-        })
+      if (vote) {
+        voteCount++
+
+        const numOptions = faker.number.int({ min: 2, max: 4 })
+        for (let i = 0; i < numOptions; i++) {
+          await db.insert(schema.activityVoteOptions).values({
+            id: createId(),
+            voteId: vote.id,
+            title: faker.lorem.words(3),
+            description: faker.lorem.sentence(),
+            voteCount: faker.number.int({ min: 0, max: 5 })
+          })
+        }
       }
     }
     results.activityVotes = voteCount
@@ -383,21 +398,24 @@ export default defineEventHandler(async (event) => {
           splitMethod: 'equal',
           date: faker.date.recent()
         }).returning()
-        sharedExpenseCount++
 
-        const members = await db.select().from(schema.groupMembers).where(
-          eq(schema.groupMembers.groupId, group.id)
-        )
-        const shareAmount = Math.floor(expense.amount! / members.length)
+        if (expense) {
+          sharedExpenseCount++
 
-        for (const member of members) {
-          await db.insert(schema.expenseParticipants).values({
-            id: createId(),
-            expenseId: expense.id,
-            userId: member.userId,
-            shareAmount,
-            isSettled: faker.datatype.boolean()
-          })
+          const members = await db.select().from(schema.groupMembers).where(
+            eq(schema.groupMembers.groupId, group.id)
+          )
+          const shareAmount = Math.floor((expense.amount ?? 0) / members.length)
+
+          for (const member of members) {
+            await db.insert(schema.expenseParticipants).values({
+              id: createId(),
+              expenseId: expense.id,
+              userId: member.userId,
+              shareAmount,
+              isSettled: faker.datatype.boolean()
+            })
+          }
         }
       }
     }
@@ -472,7 +490,9 @@ export default defineEventHandler(async (event) => {
         travelStyle: faker.helpers.arrayElement(TRAVEL_STYLES),
         isActive: true
       }).returning()
-      createdSearches.push({ id: search.id, userId: user.id })
+      if (search) {
+        createdSearches.push({ id: search.id, userId: user.id })
+      }
     }
     results.partnerSearches = createdSearches.length
 
@@ -505,17 +525,21 @@ export default defineEventHandler(async (event) => {
     let partnerReviewCount = 0
 
     for (let i = 0; i < 10; i++) {
-      const [reviewer, reviewed] = randomItems(createdUsers, 2)
+      const selectedUsers = randomItems(createdUsers, 2)
+      const reviewer = selectedUsers[0]
+      const reviewed = selectedUsers[1]
 
-      await db.insert(schema.partnerReviews).values({
-        id: createId(),
-        reviewerId: reviewer.id,
-        reviewedUserId: reviewed.id,
-        rating: faker.number.int({ min: 3, max: 5 }),
-        content: faker.lorem.paragraph(),
-        wouldTravelAgain: faker.datatype.boolean()
-      })
-      partnerReviewCount++
+      if (reviewer && reviewed) {
+        await db.insert(schema.partnerReviews).values({
+          id: createId(),
+          reviewerId: reviewer.id,
+          reviewedUserId: reviewed.id,
+          rating: faker.number.int({ min: 3, max: 5 }),
+          content: faker.lorem.paragraph(),
+          wouldTravelAgain: faker.datatype.boolean()
+        })
+        partnerReviewCount++
+      }
     }
     results.partnerReviews = partnerReviewCount
 
@@ -545,7 +569,9 @@ export default defineEventHandler(async (event) => {
           exclusions: ['Pre-existing conditions', 'Extreme sports', 'War zones'],
           isActive: true
         }).returning()
-        createdPlans.push({ id: plan.id })
+        if (plan) {
+          createdPlans.push({ id: plan.id })
+        }
       }
     }
     results.insurancePlans = createdPlans.length
@@ -578,7 +604,9 @@ export default defineEventHandler(async (event) => {
         },
         isActive: true
       }).returning()
-      createdInsurances.push({ id: insurance.id })
+      if (insurance) {
+        createdInsurances.push({ id: insurance.id })
+      }
     }
     results.userInsurances = createdInsurances.length
 
@@ -588,18 +616,21 @@ export default defineEventHandler(async (event) => {
     let claimCount = 0
 
     for (const insurance of createdInsurances.slice(0, 3)) {
-      await db.insert(schema.insuranceClaims).values({
-        id: createId(),
-        insuranceId: insurance.id,
-        claimNumber: `CLM-${faker.string.alphanumeric(8).toUpperCase()}`,
-        incidentDate: faker.date.recent().toISOString().split('T')[0],
-        incidentType: faker.helpers.arrayElement(['Medical Emergency', 'Lost Baggage', 'Flight Delay', 'Trip Cancellation']),
-        description: faker.lorem.paragraph(),
-        claimAmount: faker.number.int({ min: 100, max: 5000 }) * 100,
-        currency: 'USD',
-        status: faker.helpers.arrayElement(['submitted', 'under_review', 'approved'] as const)
-      })
-      claimCount++
+      const incidentDate = faker.date.recent().toISOString().split('T')[0]
+      if (incidentDate) {
+        await db.insert(schema.insuranceClaims).values({
+          id: createId(),
+          insuranceId: insurance.id,
+          claimNumber: `CLM-${faker.string.alphanumeric(8).toUpperCase()}`,
+          incidentDate,
+          incidentType: faker.helpers.arrayElement(['Medical Emergency', 'Lost Baggage', 'Flight Delay', 'Trip Cancellation']),
+          description: faker.lorem.paragraph(),
+          claimAmount: faker.number.int({ min: 100, max: 5000 }) * 100,
+          currency: 'USD',
+          status: faker.helpers.arrayElement(['submitted', 'under_review', 'approved'] as const)
+        })
+        claimCount++
+      }
     }
     results.insuranceClaims = claimCount
 

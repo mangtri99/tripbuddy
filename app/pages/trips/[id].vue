@@ -77,7 +77,7 @@ async function handleDelete() {
           @delete="handleDelete"
         />
 
-        <UDivider />
+        <div class="border-t" />
 
         <ItineraryBuilder :trip="currentTrip" />
       </div>
