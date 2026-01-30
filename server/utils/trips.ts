@@ -69,6 +69,7 @@ export function sanitizeTrip(trip: Trip) {
     visibility: trip.visibility,
     budget: trip.budget,
     currency: trip.currency,
+    groupId: trip.groupId,
     createdAt: trip.createdAt,
     updatedAt: trip.updatedAt
   }

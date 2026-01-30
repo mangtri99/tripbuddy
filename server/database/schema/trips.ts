@@ -2,6 +2,7 @@ import { pgTable, text, timestamp, date, integer, pgEnum, jsonb } from 'drizzle-
 import { relations } from 'drizzle-orm'
 import { createId } from '../utils'
 import { users } from './users'
+import { travelGroups } from './groups'
 
 export const tripStatusEnum = pgEnum('trip_status', ['draft', 'planned', 'ongoing', 'completed', 'cancelled'])
 export const tripVisibilityEnum = pgEnum('trip_visibility', ['private', 'group', 'public'])
@@ -9,6 +10,7 @@ export const tripVisibilityEnum = pgEnum('trip_visibility', ['private', 'group',
 export const trips = pgTable('trips', {
   id: text('id').primaryKey().$defaultFn(createId),
   userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  groupId: text('group_id').references(() => travelGroups.id, { onDelete: 'set null' }),
   title: text('title').notNull(),
   description: text('description'),
   destination: text('destination').notNull(),
@@ -57,6 +59,10 @@ export const tripsRelations = relations(trips, ({ one, many }) => ({
   user: one(users, {
     fields: [trips.userId],
     references: [users.id]
+  }),
+  group: one(travelGroups, {
+    fields: [trips.groupId],
+    references: [travelGroups.id]
   }),
   itineraryItems: many(itineraryItems)
 }))

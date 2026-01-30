@@ -20,7 +20,6 @@ export default defineEventHandler(async (event) => {
     .values({
       name: body.name,
       description: body.description,
-      tripId: body.tripId,
       coverImageUrl: body.coverImageUrl,
       createdBy: session.user.id
     })

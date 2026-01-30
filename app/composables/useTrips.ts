@@ -10,6 +10,7 @@ export interface Trip {
   visibility: 'private' | 'group' | 'public'
   budget: number | null
   currency: string
+  groupId: string | null
   createdAt: string
   updatedAt: string
 }
@@ -50,6 +51,7 @@ export interface CreateTripData {
   status?: Trip['status']
   visibility?: Trip['visibility']
   coverImageUrl?: string
+  groupId?: string
 }
 
 export interface UpdateTripData extends Partial<CreateTripData> {}

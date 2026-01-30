@@ -9,6 +9,7 @@ const route = useRoute();
 const router = useRouter();
 const { currentTrip, isLoading, fetchTrip, updateTrip, deleteTrip } =
   useTrips();
+const { groups, fetchGroups } = useGroups();
 
 const tripId = computed(() => route.params.id as string);
 const showEditModal = ref(false);
@@ -16,6 +17,7 @@ const isDeleting = ref(false);
 
 onMounted(async () => {
   await fetchTrip(tripId.value);
+  await fetchGroups();
 });
 
 async function handleEditSubmit(data: CreateTripData) {
@@ -115,6 +117,7 @@ async function handleDelete() {
             <TripForm
               v-if="currentTrip"
               :trip="currentTrip"
+              :groups="groups"
               :loading="isLoading"
               @submit="handleEditSubmit"
               @cancel="showEditModal = false"

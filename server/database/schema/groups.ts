@@ -2,14 +2,12 @@ import { pgTable, text, timestamp, pgEnum, integer } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 import { createId } from '../utils'
 import { users } from './users'
-import { trips } from './trips'
 
 export const groupRoleEnum = pgEnum('group_role', ['admin', 'editor', 'viewer'])
 export const invitationStatusEnum = pgEnum('invitation_status', ['pending', 'accepted', 'declined', 'expired'])
 
 export const travelGroups = pgTable('travel_groups', {
   id: text('id').primaryKey().$defaultFn(createId),
-  tripId: text('trip_id').references(() => trips.id, { onDelete: 'set null' }),
   name: text('name').notNull(),
   description: text('description'),
   coverImageUrl: text('cover_image_url'),
@@ -72,11 +70,10 @@ export const activityVoteResponses = pgTable('activity_vote_responses', {
   createdAt: timestamp('created_at').defaultNow().notNull()
 })
 
+// Import trips for relation (imported here to avoid circular dependency)
+import { trips } from './trips'
+
 export const travelGroupsRelations = relations(travelGroups, ({ one, many }) => ({
-  trip: one(trips, {
-    fields: [travelGroups.tripId],
-    references: [trips.id]
-  }),
   creator: one(users, {
     fields: [travelGroups.createdBy],
     references: [users.id]
@@ -84,7 +81,8 @@ export const travelGroupsRelations = relations(travelGroups, ({ one, many }) => 
   members: many(groupMembers),
   invitations: many(groupInvitations),
   announcements: many(groupAnnouncements),
-  votes: many(activityVotes)
+  votes: many(activityVotes),
+  trips: many(trips)
 }))
 
 export const groupMembersRelations = relations(groupMembers, ({ one }) => ({

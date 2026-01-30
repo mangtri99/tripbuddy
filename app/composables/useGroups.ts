@@ -18,7 +18,6 @@ export interface Group {
   name: string
   description: string | null
   coverImageUrl: string | null
-  tripId: string | null
   createdBy: string
   createdAt: string
   updatedAt: string
@@ -26,7 +25,7 @@ export interface Group {
 
 export interface GroupWithDetails extends Group {
   members: GroupMember[]
-  trip: Trip | null
+  trips: Trip[]
   currentUserRole: 'admin' | 'editor' | 'viewer'
 }
 
@@ -38,7 +37,6 @@ export interface GroupListItem extends Group {
 export interface CreateGroupData {
   name: string
   description?: string
-  tripId?: string
   coverImageUrl?: string
 }
 

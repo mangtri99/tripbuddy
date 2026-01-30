@@ -45,11 +45,10 @@ const roleLabels: Record<GroupListItem['role'], string> = {
 
       <template #footer>
         <div class="flex items-center justify-between text-sm text-muted">
-          <span v-if="group.tripId" class="flex items-center gap-1.5">
+          <span class="flex items-center gap-1.5">
             <UIcon name="i-lucide-plane" class="w-4 h-4" />
-            Linked to trip
+            Travel group
           </span>
-          <span v-else class="italic">No trip linked</span>
         </div>
       </template>
     </UCard>

@@ -52,7 +52,8 @@ export const createTripSchema = z.object({
   currency: z.string().length(3, 'Currency must be 3 characters').default('USD'),
   status: z.enum(tripStatusValues).default('draft'),
   visibility: z.enum(tripVisibilityValues).default('private'),
-  coverImageUrl: z.string().url().optional()
+  coverImageUrl: z.string().url().optional(),
+  groupId: z.string().optional()
 })
 
 export const updateTripSchema = createTripSchema.partial()
@@ -99,7 +100,6 @@ export const groupRoleValues = ['admin', 'editor', 'viewer'] as const
 export const createGroupSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name must be at most 100 characters').trim(),
   description: z.string().max(1000, 'Description must be at most 1000 characters').optional(),
-  tripId: z.string().optional(),
   coverImageUrl: z.string().url().optional()
 })
 
@@ -121,3 +121,52 @@ export type CreateGroupInput = z.infer<typeof createGroupSchema>
 export type UpdateGroupInput = z.infer<typeof updateGroupSchema>
 export type InviteMemberInput = z.infer<typeof inviteMemberSchema>
 export type UpdateMemberRoleInput = z.infer<typeof updateMemberRoleSchema>
+
+// Shared expense validation schemas
+export const expenseCategoryValues = [
+  'accommodation',
+  'transportation',
+  'food',
+  'activities',
+  'shopping',
+  'entertainment',
+  'insurance',
+  'visa',
+  'communication',
+  'other'
+] as const
+
+export const splitMethodValues = ['equal', 'percentage', 'custom', 'full'] as const
+
+export const createSharedExpenseSchema = z.object({
+  category: z.enum(expenseCategoryValues),
+  amount: z.number().int().min(1, 'Amount must be at least 1 cent'),
+  currency: z.string().length(3, 'Currency must be 3 characters').default('USD'),
+  description: z.string().min(1, 'Description is required').max(500).trim(),
+  receiptUrl: z.string().url().optional(),
+  splitMethod: z.enum(splitMethodValues).default('equal'),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)'),
+  participants: z.array(z.object({
+    userId: z.string(),
+    shareAmount: z.number().int().min(0).optional(),
+    sharePercentage: z.number().min(0).max(100).optional()
+  })).min(1, 'At least one participant is required')
+})
+
+export const updateSharedExpenseSchema = createSharedExpenseSchema.partial()
+
+export const createSettlementSchema = z.object({
+  toUserId: z.string().min(1, 'Recipient is required'),
+  amount: z.number().int().min(1, 'Amount must be at least 1 cent'),
+  currency: z.string().length(3, 'Currency must be 3 characters').default('USD'),
+  note: z.string().max(500).optional()
+})
+
+export const settleParticipantSchema = z.object({
+  isSettled: z.boolean()
+})
+
+export type CreateSharedExpenseInput = z.infer<typeof createSharedExpenseSchema>
+export type UpdateSharedExpenseInput = z.infer<typeof updateSharedExpenseSchema>
+export type CreateSettlementInput = z.infer<typeof createSettlementSchema>
+export type SettleParticipantInput = z.infer<typeof settleParticipantSchema>

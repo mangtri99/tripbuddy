@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import type { Group, CreateGroupData } from '~/composables/useGroups'
-import type { Trip } from '~/composables/useTrips'
 
 const props = defineProps<{
   group?: Group
-  trips?: Trip[]
   loading?: boolean
 }>()
 
@@ -15,19 +13,7 @@ const emit = defineEmits<{
 
 const form = reactive<CreateGroupData>({
   name: props.group?.name || '',
-  description: props.group?.description || '',
-  tripId: props.group?.tripId || ''
-})
-
-const tripOptions = computed(() => {
-  const options = [{ label: 'No trip linked', value: '' }]
-  if (props.trips) {
-    options.push(...props.trips.map(t => ({
-      label: `${t.title} - ${t.destination}`,
-      value: t.id
-    })))
-  }
-  return options
+  description: props.group?.description || ''
 })
 
 function handleSubmit() {
@@ -36,7 +22,6 @@ function handleSubmit() {
   }
 
   if (form.description) data.description = form.description
-  if (form.tripId) data.tripId = form.tripId
 
   emit('submit', data)
 }
@@ -59,14 +44,6 @@ function handleSubmit() {
           v-model="form.description"
           placeholder="Describe your travel group..."
           :rows="3"
-        />
-      </UFormField>
-
-      <UFormField v-if="trips && trips.length > 0" label="Link to Trip">
-        <USelect
-          v-model="form.tripId"
-          :items="tripOptions"
-          value-key="value"
         />
       </UFormField>
     </div>

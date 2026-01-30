@@ -29,7 +29,9 @@
       "Bash(pnpm dev)",
       "Bash(curl:*)",
       "mcp__nuxt-ui-remote__search-components-by-category",
-      "Bash(pnpm drizzle-kit drop:*)"
+      "Bash(pnpm drizzle-kit drop:*)",
+      "Bash(npx drizzle-kit push:*)",
+      "Bash(npx tsx:*)"
     ]
   }
 }

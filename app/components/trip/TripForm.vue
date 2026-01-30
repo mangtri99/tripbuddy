@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Trip, CreateTripData } from "~/composables/useTrips";
+import type { GroupListItem } from "~/composables/useGroups";
 import {
   TRIP_STATUS,
   TRIP_VISIBILITY,
@@ -8,6 +9,7 @@ import {
 
 const props = defineProps<{
   trip?: Trip;
+  groups?: GroupListItem[];
   loading?: boolean;
 }>();
 
@@ -16,7 +18,7 @@ const emit = defineEmits<{
   cancel: [];
 }>();
 
-const form = reactive<CreateTripData>({
+const form = reactive<CreateTripData & { groupId: string }>({
   title: props.trip?.title || "",
   destination: props.trip?.destination || "",
   description: props.trip?.description || "",
@@ -26,6 +28,20 @@ const form = reactive<CreateTripData>({
   currency: props.trip?.currency || "USD",
   status: props.trip?.status || "draft",
   visibility: props.trip?.visibility || "private",
+  groupId: props.trip?.groupId || "",
+});
+
+const groupOptions = computed(() => {
+  const options = [{ label: "Personal trip (no group)", value: "" }];
+  if (props.groups) {
+    options.push(
+      ...props.groups.map((g) => ({
+        label: g.name,
+        value: g.id,
+      }))
+    );
+  }
+  return options;
 });
 
 function handleSubmit() {
@@ -41,6 +57,7 @@ function handleSubmit() {
   if (form.currency) data.currency = form.currency;
   if (form.status) data.status = form.status;
   if (form.visibility) data.visibility = form.visibility;
+  if (form.groupId) data.groupId = form.groupId;
 
   emit("submit", data);
 }
@@ -127,6 +144,17 @@ function handleSubmit() {
           />
         </UFormField>
       </div>
+
+      <UFormField v-if="groups && groups.length > 0" label="Travel Group">
+        <USelect
+          v-model="form.groupId"
+          :items="groupOptions"
+          value-key="value"
+        />
+        <template #hint>
+          <span class="text-xs text-muted">Link this trip to a travel group for shared expenses and collaboration</span>
+        </template>
+      </UFormField>
     </div>
 
     <div class="flex items-center justify-end gap-3 pt-4 border-t">

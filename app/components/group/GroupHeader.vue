@@ -49,11 +49,9 @@ const isAdmin = computed(() => props.group.currentUserRole === 'admin')
       {{ group.description }}
     </p>
 
-    <div v-if="group.trip" class="flex items-center gap-2 text-sm text-muted">
+    <div v-if="group.trips && group.trips.length > 0" class="flex items-center gap-2 text-sm text-muted">
       <UIcon name="i-lucide-plane" class="w-4 h-4" />
-      <NuxtLink :to="`/trips/${group.trip.id}`" class="hover:text-primary underline">
-        {{ group.trip.title }} - {{ group.trip.destination }}
-      </NuxtLink>
+      <span>{{ group.trips.length }} trip{{ group.trips.length !== 1 ? 's' : '' }} linked</span>
     </div>
 
     <div class="flex items-center gap-2 flex-wrap">

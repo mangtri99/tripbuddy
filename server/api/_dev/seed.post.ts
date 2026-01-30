@@ -262,13 +262,14 @@ export default defineEventHandler(async (event) => {
     for (const trip of createdTrips.slice(0, 10)) {
       const [group] = await db.insert(schema.travelGroups).values({
         id: createId(),
-        tripId: trip.id,
         name: `${trip.title} Group`,
         description: faker.lorem.sentence(),
         createdBy: trip.userId
       }).returning()
       if (group) {
         createdGroups.push({ id: group.id, createdBy: trip.userId })
+        // Link trip to group
+        await db.update(schema.trips).set({ groupId: group.id }).where(eq(schema.trips.id, trip.id))
       }
     }
     results.travelGroups = createdGroups.length

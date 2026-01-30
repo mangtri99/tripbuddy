@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
     group: {
       ...sanitizeGroup(groupWithMembers),
       members: groupWithMembers.members,
-      trip: groupWithMembers.trip ? sanitizeTrip(groupWithMembers.trip) : null,
+      trips: groupWithMembers.trips.map(sanitizeTrip),
       currentUserRole: membership.role
     }
   }

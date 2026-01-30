@@ -33,17 +33,13 @@ export async function findGroupWithMembers(id: string) {
     .innerJoin(users, eq(groupMembers.userId, users.id))
     .where(eq(groupMembers.groupId, id))
 
-  let trip = null
-  if (group.tripId) {
-    const tripResult = await db
-      .select()
-      .from(trips)
-      .where(eq(trips.id, group.tripId))
-      .limit(1)
-    trip = tripResult[0] || null
-  }
+  // Get all trips belonging to this group
+  const groupTrips = await db
+    .select()
+    .from(trips)
+    .where(eq(trips.groupId, id))
 
-  return { ...group, members, trip }
+  return { ...group, members, trips: groupTrips }
 }
 
 export async function getUserGroups(userId: string) {
@@ -151,7 +147,6 @@ export function sanitizeGroup(group: TravelGroup) {
     name: group.name,
     description: group.description,
     coverImageUrl: group.coverImageUrl,
-    tripId: group.tripId,
     createdBy: group.createdBy,
     createdAt: group.createdAt,
     updatedAt: group.updatedAt

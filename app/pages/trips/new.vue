@@ -7,6 +7,11 @@ definePageMeta({
 
 const router = useRouter()
 const { isLoading, createTrip } = useTrips()
+const { groups, fetchGroups } = useGroups()
+
+onMounted(async () => {
+  await fetchGroups()
+})
 
 async function handleSubmit(data: CreateTripData) {
   try {
@@ -41,6 +46,7 @@ function handleCancel() {
 
       <UCard>
         <TripForm
+          :groups="groups"
           :loading="isLoading"
           @submit="handleSubmit"
           @cancel="handleCancel"

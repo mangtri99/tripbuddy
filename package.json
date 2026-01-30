@@ -20,7 +20,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:seed": "curl -X POST http://localhost:3000/api/_dev/seed"
+    "db:seed": "curl -X POST http://localhost:3002/api/_dev/seed"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.86",

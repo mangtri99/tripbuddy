@@ -9,7 +9,6 @@ const route = useRoute()
 const router = useRouter()
 const { user } = useAuth()
 const { currentGroup, isLoading, fetchGroup, updateGroup, deleteGroup } = useGroups()
-const { trips, fetchTrips } = useTrips()
 
 const groupId = computed(() => route.params.id as string)
 const { members, invitations, isLoading: membersLoading, fetchMembers, fetchInvitations, inviteMember, updateMemberRole, removeMember, cancelInvitation } = useGroupMembers(groupId)
@@ -20,7 +19,6 @@ const isDeleting = ref(false)
 
 onMounted(async () => {
   await fetchGroup(groupId.value)
-  await fetchTrips()
   if (currentGroup.value) {
     members.value = currentGroup.value.members
     if (currentGroup.value.currentUserRole === 'admin') {
@@ -135,6 +133,18 @@ async function handleCancelInvitation(invitationId: string) {
           @invite="showInviteModal = true"
         />
 
+        <!-- Quick Actions -->
+        <div class="flex items-center gap-3 flex-wrap">
+          <UButton
+            :to="`/groups/${groupId}/expenses`"
+            color="warning"
+            variant="soft"
+            icon="i-lucide-wallet"
+          >
+            Shared Expenses
+          </UButton>
+        </div>
+
         <div class="border-t" />
 
         <div>
@@ -148,9 +158,11 @@ async function handleCancelInvitation(invitationId: string) {
           />
         </div>
 
-        <div v-if="currentGroup.trip" class="border-t pt-8">
-          <h2 class="text-xl font-semibold mb-4">Linked Trip</h2>
-          <TripCard :trip="currentGroup.trip" />
+        <div v-if="currentGroup.trips && currentGroup.trips.length > 0" class="border-t pt-8">
+          <h2 class="text-xl font-semibold mb-4">Group Trips</h2>
+          <div class="grid gap-4 md:grid-cols-2">
+            <TripCard v-for="trip in currentGroup.trips" :key="trip.id" :trip="trip" />
+          </div>
         </div>
       </div>
 
@@ -183,7 +195,6 @@ async function handleCancelInvitation(invitationId: string) {
             <GroupForm
               v-if="currentGroup"
               :group="currentGroup"
-              :trips="trips"
               :loading="isLoading"
               @submit="handleEditSubmit"
               @cancel="showEditModal = false"
